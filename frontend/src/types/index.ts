@@ -3,14 +3,16 @@
 export interface Post {
   id: number;
   imageUrl: string;
+  description: string | null; // <-- ADD THIS
   price: number;
   creatorWallet: string;
-  isPurchased: boolean; // This comes from the backend logic
+  isPurchased: boolean;
 }
 
 export interface UserProfile {
   walletAddress: string;
   username: string | null;
   profileImage: string | null;
+  bio: string | null; // <-- ADD THIS
   posts: Post[];
 }

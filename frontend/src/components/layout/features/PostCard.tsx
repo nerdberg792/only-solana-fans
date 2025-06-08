@@ -6,7 +6,7 @@ import { SystemProgram, Transaction, PublicKey, LAMPORTS_PER_SOL } from '@solana
 import toast from 'react-hot-toast';
 import { Lock, Check, Loader2 } from 'lucide-react';
 import { Post } from '@/types';
-import api from '@/lib/api';
+import api from '@/lib/api'
 
 interface PostCardProps {
   post: Post;
@@ -54,27 +54,37 @@ export function PostCard({ post, isOwner }: PostCardProps) {
   };
 
   return (
-    <div className="group relative aspect-square rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow bg-gray-200">
-      <img
-        src={post.imageUrl}
-        alt="Post content"
-        className={`w-full h-full object-cover transition-all duration-500 ${
-          !isUnlocked ? 'blur-2xl scale-105' : 'blur-none scale-100'
-        }`}
-      />
-      {!isUnlocked && (
-        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4">
-          <button onClick={handleUnlock} disabled={isProcessing} className="bg-purple-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-center shadow-lg">
-            {isProcessing ? <Loader2 size={20} className="animate-spin" /> : <Lock size={20} />}
-            {isProcessing ? 'Processing...' : `Unlock for ${post.price} SOL`}
-          </button>
+    <div className="card card-compact bg-base-100 shadow-xl transition-all hover:shadow-2xl">
+      <figure className="group relative aspect-square bg-gray-200">
+        <img
+          src={post.imageUrl}
+          alt="Post content"
+          className={`w-full h-full object-cover transition-all duration-500 ${
+            !isUnlocked ? 'blur-2xl scale-105' : 'blur-none scale-100'
+          }`}
+        />
+        {!isUnlocked && (
+          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4">
+            <button onClick={handleUnlock} disabled={isProcessing} className="btn btn-primary shadow-lg">
+              {isProcessing ? <Loader2 size={20} className="animate-spin" /> : <Lock size={20} />}
+              {isProcessing ? 'Processing...' : `Unlock for ${post.price} SOL`}
+            </button>
+          </div>
+        )}
+        {isUnlocked && (
+          <div className="absolute top-2 right-2 bg-green-500 text-white p-1 rounded-full shadow-sm">
+            <Check size={16} />
+          </div>
+        )}
+      </figure>
+      
+      {/* --- NEW SECTION FOR DESCRIPTION --- */}
+      {post.description && isUnlocked && (
+        <div className="card-body">
+            <p className="text-gray-600">{post.description}</p>
         </div>
       )}
-      {isUnlocked && (
-        <div className="absolute top-2 right-2 bg-green-500 text-white p-1 rounded-full shadow-sm">
-          <Check size={16} />
-        </div>
-      )}
+      {/* --- END OF NEW SECTION --- */}
     </div>
   );
 };

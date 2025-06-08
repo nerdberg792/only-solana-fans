@@ -6,7 +6,8 @@ dotenv.config();
 
 // Route Imports
 import { getChallenge, verifySignature } from './controllers/authController';
-import { getProfile } from './controllers/userController';
+// ---> 1. IMPORT THE NEW CONTROLLERS
+import { getProfile, checkUsername, updateProfile } from './controllers/userController';
 import { getSignedUrlForUpload, createPost, verifyPurchase } from './controllers/postController';
 import { authMiddleware } from './middleware/authMiddleware';
 
@@ -17,8 +18,9 @@ app.use(cors());
 app.use(express.json());
 
 // --- ROUTES ---
-//@ts-ignore
+
 // Health Check
+//@ts-ignore
 app.get('/api/health', (req, res) => res.send('Backend is healthy!'));
 
 // Auth
@@ -28,15 +30,25 @@ app.post('/api/auth/challenge', getChallenge);
 app.post('/api/auth/verify', verifySignature);
 
 // Users
+// ---> 2. ADD ROUTE TO CHECK USERNAME AVAILABILITY
 //@ts-ignore
-app.get('/api/users/:walletAddress/profile', getProfile);
+app.get('/api/users/check-username', checkUsername);
 
-// Posts
+// ---> 3. ADD ROUTE TO UPDATE A USER'S PROFILE (PROTECTED)
+//@ts-ignore
+app.put('/api/users/profile', authMiddleware, updateProfile);
+
+// ---> 4. CHANGE :walletAddress to :id TO SEARCH BY BOTH
+//@ts-ignore
+app.get('/api/users/:id/profile', getProfile);
+
+// Posts (No changes needed here, the description is handled by the createPost controller)
 //@ts-ignore
 app.post('/api/posts/signed-url', authMiddleware, getSignedUrlForUpload);
 //@ts-ignore
 app.post('/api/posts', authMiddleware, createPost);
 //@ts-ignore
 app.post('/api/posts/verify-purchase', authMiddleware, verifyPurchase);
+
 
 app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));

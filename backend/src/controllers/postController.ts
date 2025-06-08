@@ -16,15 +16,20 @@ export const getSignedUrlForUpload = async (req: Request, res: Response) => {
     } catch (error) { res.status(500).json({ error: 'Could not generate upload URL.' }); }
 };
 
-// Create post record after upload
+// Modify the existing createPost function
 export const createPost = async (req: Request, res: Response) => {
     const creatorWallet = req.user!.walletAddress;
-    const { imageUrl, description, price } = req.body;
+    const { imageUrl, description, price } = req.body; // <-- add description
 
     if (!imageUrl || !price) return res.status(400).json({ error: 'Missing required fields' });
 
     const newPost = await prisma.post.create({
-        data: { creatorWallet, imageUrl, description, price: parseFloat(price) },
+        data: { 
+            creatorWallet, 
+            imageUrl, 
+            description, // <-- add it here
+            price: parseFloat(price) 
+        },
     });
     res.status(201).json(newPost);
 };
