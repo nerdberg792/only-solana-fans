@@ -40,7 +40,7 @@ export default function UploadPage() {
         const toastId = toast.loading('Preparing upload...');
         
         try {
-            const { data: { signedUrl, publicUrl } } = await api.get(`/posts/signed-url?fileType=${file.type}`);
+            const { data: { signedUrl, publicUrl } } = await api.post(`/posts/signed-url?fileType=${file.type}`);
             toast.loading('Uploading image...', { id: toastId });
             await fetch(signedUrl, { method: 'PUT', headers: { 'Content-Type': file.type }, body: file });
             toast.loading('Creating post...', { id: toastId });
