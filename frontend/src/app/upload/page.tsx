@@ -7,7 +7,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
 import { Upload, ImageIcon, Loader2 } from 'lucide-react';
-
+import Image from "next/image"
 export default function UploadPage() {
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string>('');
@@ -47,7 +47,7 @@ export default function UploadPage() {
             await api.post('/posts', { imageUrl: publicUrl, price: Number(price) });
             toast.success('Post created successfully!', { id: toastId });
             router.push(`/profile/${publicKey?.toBase58()}`);
-        } catch (error) {
+        } catch (error : any) {
             toast.error(error.response?.data?.error || 'Upload failed.', { id: toastId });
         } finally {
             setIsUploading(false);
@@ -65,7 +65,7 @@ export default function UploadPage() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
                         <div className="relative aspect-square border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors">
                             {preview ? (
-                                <img src={preview} alt="Upload preview" className="w-full h-full object-cover rounded-xl" />
+                                <Image src={preview} alt="Upload preview" className="w-full h-full object-cover rounded-xl" />
                             ) : (
                                 <div className="text-center text-gray-500">
                                     <ImageIcon size={48} className="mx-auto mb-2" />

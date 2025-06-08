@@ -8,6 +8,7 @@ import { UserProfile } from '../../../types';
 import { PostCard } from '@/components/layout/features/PostCard';
 import { Copy, Image as ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 export default function ProfilePage() {
     const params = useParams();
     const { id } = params;
@@ -48,7 +49,7 @@ export default function ProfilePage() {
       <div className="max-w-6xl mx-auto px-6 py-8">
         <header className="flex items-center gap-6 p-8 mb-8 bg-white rounded-xl shadow-sm">
           <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
-            <img
+            <Image
               src={profile?.profileImage || `https://api.dicebear.com/7.x/identicon/svg?seed=${profile?.walletAddress}`}
               alt={profile?.username || 'Profile'}
               className="w-full h-full object-cover"

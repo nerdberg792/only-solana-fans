@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { Lock, Check, Loader2 } from 'lucide-react';
 import { Post } from '@/types';
 import api from '@/lib/api';
-
+import Image from "next/image"
 interface PostCardProps {
   post: Post;
   isOwner: boolean;
@@ -55,7 +55,7 @@ export function PostCard({ post, isOwner }: PostCardProps) {
 
   return (
     <div className="group relative aspect-square rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow bg-gray-200">
-      <img
+      <Image
         src={post.imageUrl}
         alt="Post content"
         className={`w-full h-full object-cover transition-all duration-500 ${
