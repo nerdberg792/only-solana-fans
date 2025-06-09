@@ -1,5 +1,5 @@
 "use client";
-
+import { useRouter } from 'next/navigation';
 import { useEffect, useState, useMemo } from 'react'; // <-- Import useMemo
 import { useParams } from 'next/navigation';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -10,6 +10,7 @@ import { CreatorSetupForm } from '@/components/layout/features/CreatorSetupForm'
 import { EditProfileForm } from "@/components/layout/features/EditProfileForm" ; 
 import { Copy, Image as ImageIcon, Edit } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Image  from 'next/image';
 
 export default function ProfilePage() {
     const params = useParams();
@@ -20,13 +21,28 @@ export default function ProfilePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  
+    const router = useRouter();
     // --- THE FIX IS HERE: Create a stable, primitive dependency ---
     // We get the string value of the public key. This value will only change
     // if the user connects or disconnects their wallet.
     const walletAddressString = useMemo(() => publicKey?.toBase58() || null, [publicKey]);
     // --- END OF FIX ---
-
+    const handleDeletePost = async (postId: string) => {
+        if(!isOwnProfile)return 
+        const confirmed = window.confirm("Are you sure you want to delete this post?");
+        if (!confirmed) return;
+    
+        try {
+            await api.delete(`/${postId}`);
+            setProfile(prev =>
+                prev ? { ...prev, posts: prev.posts.filter(p => String(p.id) !== postId) } : prev
+            );
+            toast.success("Post deleted successfully.");
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to delete post.");
+        }
+    };
     const isOwnProfile = profile && walletAddressString && profile.walletAddress === walletAddressString;
 
     useEffect(() => {
@@ -65,7 +81,11 @@ export default function ProfilePage() {
     if (isOwnProfile && profile && !profile.username) {
         return <CreatorSetupForm />;
     }
-
+    const editHandler = () => {
+        if (isOwnProfile) {
+            router.push('/editInfo') ; 
+        }
+    };
     if (error || !profile) return <div className="text-center p-10 text-xl text-red-500">{error || 'Profile could not be loaded.'}</div>;
     
     return (
@@ -73,7 +93,7 @@ export default function ProfilePage() {
         <div className="max-w-6xl mx-auto px-6 py-8">
             <header className="flex flex-col md:flex-row items-center gap-6 p-8 mb-8 bg-white rounded-xl shadow-sm">
                 <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
-                    <img src={profile.profileImage || `https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}`} alt={profile.username || 'Profile'} className="w-full h-full object-cover"/>
+                    <Image src={profile.profileImage || `https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}`} alt={profile.username || 'Profile'} className="w-full h-full object-cover" unoptimized/>
                 </div>
                 <div className="flex-1 text-center md:text-left">
                     <h1 className="text-3xl font-bold text-gray-900">@{profile.username}</h1>
@@ -84,7 +104,7 @@ export default function ProfilePage() {
                     {profile.bio && <p className="text-gray-600 mt-4 max-w-prose">{profile.bio}</p>}
                 </div>
                 {isOwnProfile && (
-                    <button  className="btn btn-outline btn-sm">
+                    <button onClick={editHandler} className="btn btn-outline btn-sm">
                         <Edit size={16} /> Edit Profile
                     </button>
                 )}
@@ -93,7 +113,7 @@ export default function ProfilePage() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Posts</h2>
                 {profile.posts.length > 0 ? (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                        {profile.posts.map(post => <PostCard key={post.id} post={post} isOwner={!!isOwnProfile} />)}
+                        {profile.posts.map(post => <PostCard key={post.id} post={post} isOwner={!!isOwnProfile} onDelete={handleDeletePost}/>)}
                     </div>
                 ) : (
                     <div className="text-center py-20 bg-white rounded-xl shadow-sm">

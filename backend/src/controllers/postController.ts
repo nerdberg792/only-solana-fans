@@ -69,3 +69,24 @@ export const verifyPurchase = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Transaction verification failed.' });
     }
 };
+// Delete a post (only by the creator)
+export const deletePost = async (req: Request, res: Response) => {
+    const creatorWallet = req.user!.walletAddress;
+    const postId = req.params.id;
+    const intPostId = parseInt(postId) ; 
+
+    try {
+        const post = await prisma.post.findUnique({ where: { id: intPostId } });
+
+        if (!post) return res.status(404).json({ error: 'Post not found.' });
+        if (post.creatorWallet !== creatorWallet) {
+            return res.status(403).json({ error: 'You are not authorized to delete this post.' });
+        }
+
+        await prisma.post.delete({ where: { id: intPostId} });
+        res.status(200).json({ success: true, message: 'Post deleted successfully.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to delete post.' });
+    }
+};

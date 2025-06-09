@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import api from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { Check, X, Loader2, UploadCloud } from 'lucide-react';
+import Image from 'next/image' ; 
 
 const debounce = (func: (name: string) => void, delay: number) => {
     let timeout: NodeJS.Timeout;
@@ -74,7 +75,7 @@ export function CreatorSetupForm() {
                     <div className="flex flex-col items-center gap-4">
                         <div className="avatar">
                             <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                <img src={imagePreview || `https://api.dicebear.com/7.x/identicon/svg?seed=default`} />
+                                <Image src={imagePreview || `https://api.dicebear.com/7.x/identicon/svg?seed=default`} alt={'Preview'} unoptimized/>
                             </div>
                         </div>
                         <input type="file" id="profile-image-upload" accept="image/*" onChange={handleImageChange} className="hidden" required />

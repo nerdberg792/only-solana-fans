@@ -8,7 +8,7 @@ dotenv.config();
 import { getChallenge, verifySignature } from './controllers/authController';
 // ---> 1. IMPORT THE NEW CONTROLLERS
 import { getProfile, checkUsername, updateProfile } from './controllers/userController';
-import { getSignedUrlForUpload, createPost, verifyPurchase } from './controllers/postController';
+import { getSignedUrlForUpload, createPost, verifyPurchase, deletePost } from './controllers/postController';
 import { authMiddleware } from './middleware/authMiddleware';
 
 const app:Application = express();
@@ -49,6 +49,7 @@ app.post('/api/posts/signed-url', authMiddleware, getSignedUrlForUpload);
 app.post('/api/posts', authMiddleware, createPost);
 //@ts-ignore
 app.post('/api/posts/verify-purchase', authMiddleware, verifyPurchase);
-
+//@ts-ignore
+app.delete('/api/:id', authMiddleware , deletePost)
 
 app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));

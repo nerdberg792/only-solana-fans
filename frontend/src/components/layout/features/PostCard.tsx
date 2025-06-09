@@ -4,16 +4,17 @@ import { useState } from 'react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { SystemProgram, Transaction, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import toast from 'react-hot-toast';
-import { Lock, Check, Loader2 } from 'lucide-react';
+import { Lock, Check, Loader2 ,Trash, Undo} from 'lucide-react';
 import { Post } from '@/types';
 import api from '@/lib/api'
-
+import Image from 'next/image';
 interface PostCardProps {
   post: Post;
   isOwner: boolean;
+  onDelete?: (postId:string) => void ; 
 }
 
-export function PostCard({ post, isOwner }: PostCardProps) {
+export function PostCard({ post, isOwner , onDelete}: PostCardProps) {
   const [isUnlocked, setIsUnlocked] = useState(post.isPurchased || isOwner);
   const [isProcessing, setIsProcessing] = useState(false);
   
@@ -56,12 +57,14 @@ export function PostCard({ post, isOwner }: PostCardProps) {
   return (
     <div className="card card-compact bg-base-100 shadow-xl transition-all hover:shadow-2xl">
       <figure className="group relative aspect-square bg-gray-200">
-        <img
+        <Image
           src={post.imageUrl}
           alt="Post content"
           className={`w-full h-full object-cover transition-all duration-500 ${
             !isUnlocked ? 'blur-2xl scale-105' : 'blur-none scale-100'
-          }`}
+          }`
+         }
+         unoptimized
         />
         {!isUnlocked && (
           <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4">
@@ -76,6 +79,20 @@ export function PostCard({ post, isOwner }: PostCardProps) {
             <Check size={16} />
           </div>
         )}
+        {isOwner && (
+        <div className="absolute top-2 left-2 bg-red-500 text-white p-1 rounded-full shadow-sm">
+         <button
+      onClick={() => {
+        const confirmed = window.confirm("Are you sure you want to delete this post?");
+        if (confirmed && onDelete) onDelete(String(post.id));
+      }}
+      title="Delete Post"
+      className="text-xs font-bold px-2"
+         >
+             <Trash size={16} />
+           </button>
+        </div>
+    )}
       </figure>
       
       {/* --- NEW SECTION FOR DESCRIPTION --- */}
@@ -84,6 +101,7 @@ export function PostCard({ post, isOwner }: PostCardProps) {
             <p className="text-gray-600">{post.description}</p>
         </div>
       )}
+      
       {/* --- END OF NEW SECTION --- */}
     </div>
   );

@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { Check, X, Loader2, UploadCloud } from 'lucide-react';
 import { UserProfile } from '@/types';
-
+import Image from "next/image"
 const debounce = (func: (name: string) => void, delay: number) => { let timeout: NodeJS.Timeout; return (...args: [string]) => { clearTimeout(timeout); timeout = setTimeout(() => func(...args), delay); }; };
 
 interface EditProfileFormProps {
@@ -88,7 +88,7 @@ export function EditProfileForm({ profile, onClose }: EditProfileFormProps) {
              <div className="flex flex-col items-center gap-4">
                 <div className="avatar">
                     <div className="w-24 rounded-full ring ring-primary">
-                        <img src={imagePreview || `https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}`} alt="Profile Preview"/>
+                        <Image src={imagePreview || `https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}`} alt="Profile Preview" unoptimized/>
                     </div>
                 </div>
                 <input type="file" id="edit-profile-image" accept="image/*" onChange={handleImageChange} className="hidden" />
