@@ -18,8 +18,9 @@ datasource db {
 
 model User {
   walletAddress String    @id @unique
-  username      String?   @unique
-  profileImage  String?
+  username      String?   @unique   
+  profileImage  String?   
+  bio           String? 
   createdAt     DateTime  @default(now())
   posts         Post[]
   purchases     Purchase[]
@@ -29,7 +30,7 @@ model Post {
   id            Int      @id @default(autoincrement())
   imageUrl      String
   description   String?
-  price         Decimal  // Price in SOL
+  price         Decimal
   creatorWallet String
   createdAt     DateTime @default(now())
   creator       User     @relation(fields: [creatorWallet], references: [walletAddress])
