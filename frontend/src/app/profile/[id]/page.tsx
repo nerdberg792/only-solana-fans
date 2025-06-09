@@ -82,9 +82,10 @@ export default function ProfilePage() {
         return <CreatorSetupForm />;
     }
     const editHandler = () => {
-        if (isOwnProfile) {
-            router.push('/editInfo') ; 
-        }
+        // if (isOwnProfile) {
+        //     localStorage.setItem('edit-profile' , JSON.stringify(profile))
+        //     router.push('/editInfo') ; 
+        // }
     };
     if (error || !profile) return <div className="text-center p-10 text-xl text-red-500">{error || 'Profile could not be loaded.'}</div>;
     
@@ -93,7 +94,7 @@ export default function ProfilePage() {
         <div className="max-w-6xl mx-auto px-6 py-8">
             <header className="flex flex-col md:flex-row items-center gap-6 p-8 mb-8 bg-white rounded-xl shadow-sm">
                 <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
-                    <Image src={profile.profileImage || `https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}`} alt={profile.username || 'Profile'} className="w-full h-full object-cover" unoptimized/>
+                    <Image src={profile.profileImage || `https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}`} width={20} height={20} alt={profile.username || 'Profile'} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1 text-center md:text-left">
                     <h1 className="text-3xl font-bold text-gray-900">@{profile.username}</h1>
@@ -117,7 +118,7 @@ export default function ProfilePage() {
                     </div>
                 ) : (
                     <div className="text-center py-20 bg-white rounded-xl shadow-sm">
-                        <ImageIcon size={48} className="text-gray-400 mx-auto mb-4" />
+                        <ImageIcon size={48} className="text-gray-400 mx-auto mb-4 w-full h-full" />
                         <p className="text-gray-600 text-lg">{isOwnProfile ? "You haven't posted anything yet." : "This creator hasn't posted anything yet."}</p>
                     </div>
                 )}

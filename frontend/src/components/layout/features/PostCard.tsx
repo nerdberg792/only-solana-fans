@@ -55,54 +55,39 @@ export function PostCard({ post, isOwner , onDelete}: PostCardProps) {
   };
 
   return (
-    <div className="card card-compact bg-base-100 shadow-xl transition-all hover:shadow-2xl">
-      <figure className="group relative aspect-square bg-gray-200">
-        <Image
-          src={post.imageUrl}
-          alt="Post content"
-          className={`w-full h-full object-cover transition-all duration-500 ${
-            !isUnlocked ? 'blur-2xl scale-105' : 'blur-none scale-100'
-          }`
-         }
-         unoptimized
-        />
-        {!isUnlocked && (
-          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4">
-            <button onClick={handleUnlock} disabled={isProcessing} className="btn btn-primary shadow-lg">
-              {isProcessing ? <Loader2 size={20} className="animate-spin" /> : <Lock size={20} />}
-              {isProcessing ? 'Processing...' : `Unlock for ${post.price} SOL`}
-            </button>
-          </div>
-        )}
-        {isUnlocked && (
-          <div className="absolute top-2 right-2 bg-green-500 text-white p-1 rounded-full shadow-sm">
-            <Check size={16} />
-          </div>
-        )}
-        {isOwner && (
-        <div className="absolute top-2 left-2 bg-red-500 text-white p-1 rounded-full shadow-sm">
-         <button
-      onClick={() => {
-        const confirmed = window.confirm("Are you sure you want to delete this post?");
-        if (confirmed && onDelete) onDelete(String(post.id));
-      }}
-      title="Delete Post"
-      className="text-xs font-bold px-2"
-         >
-             <Trash size={16} />
-           </button>
-        </div>
-    )}
-      </figure>
-      
-      {/* --- NEW SECTION FOR DESCRIPTION --- */}
-      {post.description && isUnlocked && (
-        <div className="card-body">
-            <p className="text-gray-600">{post.description}</p>
+    <div className="group relative aspect-square rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow bg-gray-200">
+      <Image
+        height={10}
+        width={10}
+        src={post.imageUrl}
+        alt="Post content"
+        className={`w-full h-full object-cover transition-all duration-500 ${
+          !isUnlocked ? 'blur-2xl scale-105' : 'blur-none scale-100'
+        }`}
+      />
+      {isOwner && onDelete && (
+  <button
+    onClick={() => onDelete(String(post.id))}
+    className="absolute top-2 left-2 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full shadow-sm transition-colors"
+    title="Delete post"
+  >
+    <Trash size={16} />
+  </button>
+)}
+
+      {!isUnlocked && (
+        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4">
+          <button onClick={handleUnlock} disabled={isProcessing} className="bg-purple-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-center shadow-lg">
+            {isProcessing ? <Loader2 size={20} className="animate-spin" /> : <Lock size={20} />}
+            {isProcessing ? 'Processing...' : `Unlock for ${post.price} SOL`}
+          </button>
         </div>
       )}
-      
-      {/* --- END OF NEW SECTION --- */}
+      {isUnlocked && (
+        <div className="absolute top-2 right-2 bg-green-500 text-white p-1 rounded-full shadow-sm">
+          <Check size={16} />
+        </div>
+      )}
     </div>
   );
 };

@@ -73,7 +73,7 @@ export default function UploadPage() {
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
                         <div className="relative aspect-square border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors">
-                            {preview ? <Image src={preview} alt="Upload preview" className="w-full h-full object-cover rounded-xl" unoptimized/> : <div className="text-center text-gray-500"><ImageIcon size={48} className="mx-auto mb-2" /><p>Click or drag file</p></div>}
+                            {preview ? <Image src={preview} width={20} height={20} alt="Upload preview" className="w-full h-full object-cover rounded-xl" /> : <div className="text-center text-gray-500"><ImageIcon size={48} className="mx-auto mb-2" /><p>Click or drag file</p></div>}
                             <input type="file" accept="image/*" onChange={handleImageChange} required className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                         </div>
                     </div>

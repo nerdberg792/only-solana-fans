@@ -86,18 +86,42 @@ export function EditProfileForm({ profile, onClose }: EditProfileFormProps) {
             {/* Form fields are very similar to CreatorSetupForm, but pre-filled */}
             {/* ... JSX for profile picture, username, and bio inputs ... */}
              <div className="flex flex-col items-center gap-4">
-                <div className="avatar">
-                    <div className="w-24 rounded-full ring ring-primary">
-                        <Image src={imagePreview || `https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}`} alt="Profile Preview" unoptimized/>
-                    </div>
-                </div>
+             <div className="avatar">
+  <div className="w-24 rounded-full ring ring-primary">
+    {imagePreview.endsWith('.svg') ? (
+      <Image
+        src={profile.profileImage|| `https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}`}
+        alt="Profile Preview"
+        className="w-full h-full object-cover rounded-full"
+      />
+    ) : (
+      <Image
+        src={profile.profileImage||`https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}` }
+        width={96}
+        height={96}
+        alt="Profile Preview"
+        className="w-full h-full object-cover"
+        unoptimized
+      />
+    )}
+  </div>
+</div>
+
                 <input type="file" id="edit-profile-image" accept="image/*" onChange={handleImageChange} className="hidden" />
                 <label htmlFor="edit-profile-image" className="btn btn-sm btn-outline">Change Picture</label>
             </div>
              <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">Username</label>
                 <div className="relative">
-                    <input id="username" type="text" value={username} onChange={handleUsernameChange} className="input input-bordered w-full" required />
+                <input
+  id="username"
+  type="text"
+  value={username}
+  onChange={handleUsernameChange}
+  placeholder={profile.username|| "Enter username"}
+  className="input input-bordered w-full"
+  required
+/>
                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                         {usernameStatus === 'checking' && <Loader2 className="animate-spin text-gray-400" />}
                         {usernameStatus === 'available' && <Check className="text-green-500" />}
@@ -107,7 +131,14 @@ export function EditProfileForm({ profile, onClose }: EditProfileFormProps) {
             </div>
              <div>
                 <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
-                <textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} rows={3} className="textarea textarea-bordered w-full"></textarea>
+                <textarea
+  id="bio"
+  value={bio}
+  onChange={(e) => setBio(e.target.value)}
+  placeholder={profile.bio || "Tell us about yourself..."}
+  rows={3}
+  className="textarea textarea-bordered w-full"
+/>
             </div>
             <div className="flex gap-4">
                  <button type="button" onClick={onClose} className="btn w-full">Cancel</button>

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-
+import Image from 'next/image';
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();

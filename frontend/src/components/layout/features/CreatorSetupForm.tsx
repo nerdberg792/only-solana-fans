@@ -75,7 +75,7 @@ export function CreatorSetupForm() {
                     <div className="flex flex-col items-center gap-4">
                         <div className="avatar">
                             <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                <Image src={imagePreview || `https://api.dicebear.com/7.x/identicon/svg?seed=default`} alt={'Preview'} unoptimized/>
+                                <Image src={imagePreview || `https://api.dicebear.com/7.x/identicon/svg?seed=default`} alt={'Preview'} width={20} height={20} className="w-full h-full object-cover" />
                             </div>
                         </div>
                         <input type="file" id="profile-image-upload" accept="image/*" onChange={handleImageChange} className="hidden" required />
