@@ -1,7 +1,3 @@
-Of course. A good README is essential for any project. Here is a comprehensive, well-structured README in Markdown, tailored specifically to your Solana OnlyFans MVP. You can copy and paste this directly into a `README.md` file in the root of your project.
-
----
-
 # SolanaFans MVP
 
 **SolanaFans** is a proof-of-concept, decentralized creator platform built on the Solana blockchain. This MVP allows creators to monetize their content (images) by setting a price in SOL, which users can pay directly from their wallets to get access.
