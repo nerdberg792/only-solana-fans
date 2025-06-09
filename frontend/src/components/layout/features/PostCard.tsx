@@ -56,7 +56,7 @@ export function PostCard({ post, isOwner , onDelete}: PostCardProps) {
 
   return (
     <div className="group relative aspect-square rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow bg-gray-200">
-      <Image
+      <img
         height={10}
         width={10}
         src={post.imageUrl}

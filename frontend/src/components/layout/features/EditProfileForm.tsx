@@ -89,19 +89,18 @@ export function EditProfileForm({ profile, onClose }: EditProfileFormProps) {
              <div className="avatar">
   <div className="w-24 rounded-full ring ring-primary">
     {imagePreview.endsWith('.svg') ? (
-      <Image
+      <img
         src={profile.profileImage|| `https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}`}
         alt="Profile Preview"
         className="w-full h-full object-cover rounded-full"
       />
     ) : (
-      <Image
+      <img
         src={profile.profileImage||`https://api.dicebear.com/7.x/identicon/svg?seed=${profile.walletAddress}` }
         width={96}
         height={96}
         alt="Profile Preview"
         className="w-full h-full object-cover"
-        unoptimized
       />
     )}
   </div>
