@@ -46,7 +46,7 @@ export default function UploadPage() {
             await fetch(signedUrl, { method: 'PUT', headers: { 'Content-Type': file.type }, body: file });
             toast.loading('Creating post...', { id: toastId });
             
-            // --- UPDATE THIS API CALL ---
+           
             await api.post('/posts', { 
                 imageUrl: publicUrl, 
                 price: Number(price),

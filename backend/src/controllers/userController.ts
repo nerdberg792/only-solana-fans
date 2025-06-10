@@ -89,7 +89,21 @@ export const getProfile = async (req: Request, res: Response) => {
                           },
                       }))
                     : false;
-                return { ...post, isPurchased };
+
+                // Only include imageUrl if the post is purchased by the viewer
+                // or if the viewer is the creator of the post
+                const isCreator = viewerWallet === post.creatorWallet;
+                const shouldIncludeImage = isPurchased || isCreator;
+
+                return {
+                    id: post.id,
+                    description: post.description,
+                    price: post.price,
+                    creatorWallet: post.creatorWallet,
+                    createdAt: post.createdAt,
+                    isPurchased,
+                    ...(shouldIncludeImage && { imageUrl: post.imageUrl })
+                };
             })
         );
         
