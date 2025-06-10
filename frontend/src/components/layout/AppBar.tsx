@@ -5,9 +5,9 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import { useAuthStore } from "../../stores/useAuthStore";
-import api from "../../lib/api";
-import { User, ChevronDown, Upload } from 'lucide-react';
+import { useAuthStore } from "@/stores/useAuthStore";
+import api from "@/lib/api";
+import { User, ChevronDown, Upload , Zap } from 'lucide-react';
 import { useRouter } from "next/navigation";
 
 export function AppBar() {
@@ -50,9 +50,13 @@ export function AppBar() {
     return (
         <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-3 sticky top-0 z-50">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
-                <Link href="/" className="text-2xl font-bold text-gray-900 hover:text-purple-600 transition-colors">
-                    SolanaFans
-                </Link>
+            <div className="flex items-center space-x-2 mb-4 md:mb-0" onClick={() => { router.push("/") }}>
+    <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+        <Zap className="text-white" size={20} />
+    </div>
+    {/* The fix is applied on the line below */}
+    <span className="text-xl font-bold text-gray-800">SolanaFans</span>
+</div>
                 <div className="flex items-center gap-4">
                     {!token ? (
                         <WalletMultiButton className="!bg-purple-600 !text-white !px-5 !py-2 !rounded-lg !font-medium hover:!bg-purple-700 !transition-colors" />
