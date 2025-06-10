@@ -10,7 +10,7 @@ import { CreatorSetupForm } from '@/components/layout/features/CreatorSetupForm'
 import { EditProfileForm } from "@/components/layout/features/EditProfileForm" ; 
 import { Copy, Image as ImageIcon, Edit } from 'lucide-react';
 import toast from 'react-hot-toast';
-import Image  from 'next/image';
+
 
 export default function ProfilePage() {
     const params = useParams();
@@ -27,6 +27,7 @@ export default function ProfilePage() {
     // if the user connects or disconnects their wallet.
     const walletAddressString = useMemo(() => publicKey?.toBase58() || null, [publicKey]);
     // --- END OF FIX ---
+    
     const handleDeletePost = async (postId: string) => {
         if(!isOwnProfile)return 
         const confirmed = window.confirm("Are you sure you want to delete this post?");
@@ -43,6 +44,31 @@ export default function ProfilePage() {
             toast.error("Failed to delete post.");
         }
     };
+
+    // Handle successful purchase
+    const handlePurchaseSuccess = async (postId: number) => {
+        try {
+            // Refetch the profile to get updated post data with imageUrl
+            const viewerWalletQuery = walletAddressString ? `?viewerWallet=${walletAddressString}` : '';
+            const response = await api.get(`/users/${id}/profile${viewerWalletQuery}`);
+            setProfile(response.data);
+            toast.success('Content unlocked!');
+        } catch (error) {
+            console.error('Error refreshing profile after purchase:', error);
+            // Fallback: update just the local state
+            setProfile(prev => 
+                prev ? {
+                    ...prev,
+                    posts: prev.posts.map(post => 
+                        post.id === postId 
+                            ? { ...post, isPurchased: true }
+                            : post
+                    )
+                } : prev
+            );
+        }
+    };
+    
     const isOwnProfile = profile && walletAddressString && profile.walletAddress === walletAddressString;
 
     useEffect(() => {
@@ -114,7 +140,15 @@ export default function ProfilePage() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Posts</h2>
                 {profile.posts.length > 0 ? (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                        {profile.posts.map(post => <PostCard key={post.id} post={post} isOwner={!!isOwnProfile} onDelete={handleDeletePost}/>)}
+                        {profile.posts.map(post => 
+                            <PostCard 
+                                key={post.id} 
+                                post={post} 
+                                isOwner={!!isOwnProfile} 
+                                onDelete={handleDeletePost}
+                                onPurchaseSuccess={handlePurchaseSuccess}
+                            />
+                        )}
                     </div>
                 ) : (
                     <div className="text-center py-20 bg-white rounded-xl shadow-sm">
